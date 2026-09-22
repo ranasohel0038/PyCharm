@@ -1,13 +1,22 @@
 import os
-if  not os.path.exists("pin.txt"):
-        with open("pin.txt", "w") as f:
-            f.write("1234")
-with open("pin.txt", "r") as f:
-    saved_pin_text = f.read().strip()
-    if saved_pin_text !="":
-        correct_pin = int(saved_pin_text)
-    else:
-        correct_pin = 1234
+def get_saved_pin():
+    if os.path.exists("pin.txt"):
+        try:
+            with open("pin.txt","r") as f:
+                content = f.read().strip()
+                if content:
+                    return int(content)
+
+        except ValueError:
+            pass
+    save_new_pin(1234)
+    return 1234
+def save_new_pin(new_pin):
+    with open("pin.txt","w") as f:
+        f.write(str(new_pin))
+        f.flush()
+correct_pin= get_saved_pin()
+
 
 print("==================")
 print("    RANA'S ATM    ")
