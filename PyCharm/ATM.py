@@ -80,8 +80,8 @@ while True:
         input("\nPress Enter to main menu>>")
 
     elif option == 7:
-        print("Please collect your card")
-        print("Thank you for using RANA'S ATM")
+        print("Please collect your card>")
+        print("<<Thank you for using RANA'S ATM>>")
         break
     else:
      print("Invalid option")
