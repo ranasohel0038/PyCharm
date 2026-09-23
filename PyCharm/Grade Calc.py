@@ -158,7 +158,7 @@ def main():
             print("=" * 60)
 
         else:
-            # 'n' চাপলে কোনো এরর ছাড়াই Main Subject-এর রেজাল্ট দেখাবে
+            # For no or 'n'
             print("\n" + "=" * 60)
             print("             FINAL RESULT WITHOUT 4TH SUBJECT             ")
             print("=" * 60)
