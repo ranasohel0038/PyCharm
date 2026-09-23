@@ -38,10 +38,9 @@ def get_letter_grade(gpa):
 
 
 def main():
-    # Using loop for again counting
     while True:
         print("\n" + "=" * 54)
-        print("             GPA CALCULATOR PROGRAM             ")
+        print("            MY GPA CALCULATOR             ")
         print("=" * 54)
 
         try:
@@ -51,20 +50,16 @@ def main():
 
             main_subjects = []
             total_main_gpa = 0.0
-            has_failed = False
+            failed_subjects = []  # For Failed Sub List
 
             # 1. Main subjects input
             for i in range(1, main_sub_count + 1):
-                sub_name = input(
-                    f"\n{i} no. Subject Name: "
-                ).strip()
+                sub_name = input(f"\n{i} no. Subject Name: ").strip()
 
                 while True:
                     try:
                         marks = float(
-                            input(
-                                f"'{sub_name}' Obtained Marks (0-100): "
-                            )
+                            input(f"'{sub_name}' Obtained Marks (0-100): ")
                         )
                         if 0 <= marks <= 100:
                             break
@@ -76,7 +71,7 @@ def main():
                 grade, gpa = get_grade_and_gpa(marks)
 
                 if grade == "F":
-                    has_failed = True
+                    failed_subjects.append(sub_name)
 
                 total_main_gpa += gpa
                 main_subjects.append(
@@ -88,13 +83,24 @@ def main():
                     }
                 )
 
+            # Golden A+ Knowing Flag (All Sub must be A+)
+            is_golden_aplus = (
+                len(failed_subjects) == 0
+                and all(res["grade"] == "A+" for res in main_subjects)
+            )
+
             # 2. Main subjects calculation
-            if has_failed:
+            if failed_subjects:
                 main_final_gpa = 0.00
-                main_final_grade = "F (Failed)"
+                fail_list_str = ", ".join(failed_subjects)
+                main_final_grade = f"F (Failed in {len(failed_subjects)} subject/s: {fail_list_str})"
             else:
                 main_final_gpa = total_main_gpa / main_sub_count
-                main_final_grade = get_letter_grade(main_final_gpa)
+                base_grade = get_letter_grade(main_final_gpa)
+                if is_golden_aplus:
+                    main_final_grade = "Golden A+"
+                else:
+                    main_final_grade = base_grade
 
             # 3. Output main subjects result
             print("\n" + "=" * 60)
@@ -111,9 +117,7 @@ def main():
 
             # 4. 4th subject option
             choice = (
-                input("\nDo you have 4th Subject? (y/n): ")
-                .strip()
-                .lower()
+                input("\nDo you have 4th Subject? (y/n): ").strip().lower()
             )
 
             if choice in ["yes", "y"]:
@@ -122,9 +126,7 @@ def main():
                 while True:
                     try:
                         opt_marks = float(
-                            input(
-                                f"'{opt_sub_name}' Obtained Marks (0-100): "
-                            )
+                            input(f"'{opt_sub_name}' Obtained Marks (0-100): ")
                         )
                         if 0 <= opt_marks <= 100:
                             break
@@ -150,15 +152,26 @@ def main():
                 )
                 print("-" * 60)
 
-                if has_failed or opt_grade == "F":
+                if failed_subjects or opt_grade == "F":
                     opt_final_gpa = 0.00
-                    opt_final_grade = "F (Failed)"
+                    # Failed count with 4th subject
+                    total_failed = list(failed_subjects)
+                    if opt_grade == "F":
+                        total_failed.append(f"{opt_sub_name} (4th Subject)")
+
+                    fail_list_str = ", ".join(total_failed)
+                    opt_final_grade = f"F (Failed in {len(total_failed)} subject/s: {fail_list_str})"
                 else:
                     calculated_gpa = (
                         total_main_gpa + extra_gpa
                     ) / main_sub_count
                     opt_final_gpa = min(5.00, calculated_gpa)
-                    opt_final_grade = get_letter_grade(opt_final_gpa)
+
+                    base_grade = get_letter_grade(opt_final_gpa)
+                    if is_golden_aplus:
+                        opt_final_grade = "Golden A+"
+                    else:
+                        opt_final_grade = base_grade
 
                 print(f"4th Subject Bonus Point: +{extra_gpa:.2f}")
                 print(f"Final GPA: {opt_final_gpa:.2f}")
@@ -167,7 +180,9 @@ def main():
 
             else:
                 print("\n" + "=" * 60)
-                print("             FINAL RESULT WITHOUT 4TH SUBJECT             ")
+                print(
+                    "             FINAL RESULT WITHOUT 4TH SUBJECT             "
+                )
                 print("=" * 60)
                 print(f"Final GPA: {main_final_gpa:.2f}")
                 print(f"Final Grade: {main_final_grade}")
@@ -176,14 +191,13 @@ def main():
         except ValueError:
             print("\nError: Please enter valid numbers.")
 
-        # >>> আবার হিসেব করার জন্য অপশন <<<
+        # >>> For again counting <<<
         again = (
-            input("\nDo You Want Calculate Again? (y/n): ")
-            .strip()
-            .lower()
+            input("\nDo You Want Calculate Again? (y/n): ").strip().lower()
         )
         if again not in ["yes", "y"]:
-            print("\nThanks for using. Now Closing...")
+            print("\nThanks for using me!")
+            input("\nPress Enter to exit...")
             break
 
 
