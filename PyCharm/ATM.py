@@ -1,6 +1,4 @@
-print("==================")
-print("    RANA'S ATM    ")
-print("==================")
+
 
 input("Please insert your card and press Enter once inserted>>")
 
@@ -37,7 +35,7 @@ while True:
             print("Your remaining Balance is:",balance)
             input("\nPress Enter to main menu>>")
         else:
-            print("Insufficient funds")
+            print("Sorry, Insufficient funds")
             input("\nPress Enter to main menu>>")
     elif option == 3:
         amount = int(input("Enter deposit amount:"))
